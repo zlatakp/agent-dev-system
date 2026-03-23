@@ -22,6 +22,7 @@ flowchart TD
 
     E -->|Sends implementation / blockers / questions| A
     A -->|Evaluates engineer output| E
+```
 
 Each agent reads its inbox, acts, and writes to the next agent's inbox.
 You only get involved when an iteration is complete or a blocker needs
