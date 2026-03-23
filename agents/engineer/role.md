@@ -20,6 +20,7 @@ type from the frontmatter status field:
   From architect: spec              → implement
   From architect: spec-amendment    → re-read, adjust implementation
   From architect: rejected          → read instructions, re-implement
+  From architect: onboarding        → read relevant files, update logs only
 
 Move processed files to ../engineer/inbox/done/ only after you
 have fully acted on them.

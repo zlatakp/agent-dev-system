@@ -45,6 +45,15 @@ You will be prompted for the absolute path to your project:
 ```
 Enter the absolute path to your project: /Users/you/code/my-project
 ```
+## Onboarding to an existing project
+
+Before writing requirements, drop an onboarding file into the PM inbox:
+
+    cp agents/schemas/onboarding.md agents/pm/inbox/YYYY-MM-DD_HH-MM_onboarding.md
+    # fill it out
+
+Run each agent once with: Check your inbox and proceed.
+No code will be written. Agents orient themselves before any work starts.
 
 ---
 

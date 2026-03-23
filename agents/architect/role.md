@@ -21,6 +21,7 @@ type from the frontmatter status field:
   From PM:       iteration-plan      → produce a spec for engineer
   From PM:       refactor            → read ../schemas/refactor.md, produce a spec
   From PM:       config-extraction   → read ../schemas/config-extraction.md, produce a spec
+  From PM:       onboarding          → read, orient, update logs only
   From engineer: completion          → review implementation
   From engineer: clarification       → resolve or escalate to PM
 
