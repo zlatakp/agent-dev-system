@@ -12,6 +12,51 @@ echo "agent-pipeline setup"
 echo "--------------------"
 echo ""
 
+# ── Check for existing state ──────────────────────────────────
+
+RUNTIME_DIRS=(
+  "agents/pm/inbox"
+  "agents/pm/logs"
+  "agents/architect/inbox"
+  "agents/architect/logs"
+  "agents/engineer/inbox"
+  "agents/engineer/logs"
+  "agents/human/inbox"
+  "agents/human/outbox"
+)
+
+EXISTING_FILES=()
+
+for dir in "${RUNTIME_DIRS[@]}"; do
+  if [ -d "$PIPELINE_DIR/$dir" ]; then
+    while IFS= read -r -d '' file; do
+      EXISTING_FILES+=("$file")
+    done < <(find "$PIPELINE_DIR/$dir" -type f -name "*.md" -print0 2>/dev/null)
+  fi
+done
+
+if [ ${#EXISTING_FILES[@]} -gt 0 ]; then
+  echo "Existing pipeline state detected:"
+  echo ""
+  for file in "${EXISTING_FILES[@]}"; do
+    echo "  ${file#$PIPELINE_DIR/}"
+  done
+  echo ""
+  read -p "Discard and start fresh? [y/N] " DISCARD
+
+  if [[ "$DISCARD" =~ ^[Yy]$ ]]; then
+    for dir in "${RUNTIME_DIRS[@]}"; do
+      rm -rf "$PIPELINE_DIR/$dir"
+    done
+    echo ""
+    echo "✓ Previous state discarded"
+  else
+    echo ""
+    echo "Keeping existing state. Continuing setup..."
+  fi
+  echo ""
+fi
+
 # ── Project root ──────────────────────────────────────────────
 
 read -p "Enter the absolute path to your project: " PROJECT_ROOT
@@ -40,14 +85,18 @@ echo "✓ Folders created"
 
 # ── Project state ─────────────────────────────────────────────
 
-cp "$PIPELINE_DIR/agents/schemas/project-state.md" \
-   "$PIPELINE_DIR/agents/pm/logs/project-state.md"
-
-echo "✓ Project state initialised"
+if [ ! -f "$PIPELINE_DIR/agents/pm/logs/project-state.md" ]; then
+  cp "$PIPELINE_DIR/agents/schemas/project-state.md" \
+     "$PIPELINE_DIR/agents/pm/logs/project-state.md"
+  echo "✓ Project state initialised"
+else
+  echo "✓ Project state preserved"
+fi
 
 # ── Gitignore ─────────────────────────────────────────────────
 
-cat >> "$PIPELINE_DIR/.gitignore" << 'EOF'
+if ! grep -q "agent-pipeline" "$PIPELINE_DIR/.gitignore" 2>/dev/null; then
+  cat >> "$PIPELINE_DIR/.gitignore" << 'EOF'
 
 # runtime state — do not commit
 agents/.env
@@ -60,10 +109,13 @@ agents/engineer/logs/
 agents/human/inbox/
 agents/human/outbox/
 EOF
-
-echo "✓ Gitignore updated"
+  echo "✓ Gitignore updated"
+else
+  echo "✓ Gitignore already configured"
+fi
 
 # ── Done ──────────────────────────────────────────────────────
+
 echo ""
 echo "Pipeline ready."
 echo ""

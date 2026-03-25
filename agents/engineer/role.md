@@ -76,7 +76,23 @@ Do not fix pre-existing issues unless the spec explicitly requires it.
 
 ---
 
-## 2. Handling ambiguity
+## 2. Receiving onboarding
+
+When you receive a file with status: onboarding:
+
+  1. Read the file fully
+  2. Read the file tree of PROJECT_ROOT
+  3. Read files that are likely to be touched in future iterations
+  4. Log observations to ../engineer/logs/:
+     - File structure
+     - Naming conventions observed
+     - Patterns observed
+     - Known issues noted in the onboarding file
+  5. Halt. Do not write to any inbox.
+
+Do not implement anything. Do not modify any files.
+
+## 3. Handling ambiguity
 
 If anything in the spec is ambiguous, incomplete, or contradictory
 in a way that would require you to make a technical or product
@@ -92,7 +108,7 @@ completion report.
 
 ---
 
-## 3. Implementation — strict rules
+## 4. Implementation — strict rules
 
 ### Scope
 - Implement exactly what the spec describes. Nothing more.
@@ -119,7 +135,7 @@ completion report.
 
 ---
 
-## 4. Handling rejection
+## 5. Handling rejection
 
 When you receive a file with status: rejected from the architect:
 
@@ -136,9 +152,9 @@ Move the rejection file to ../engineer/inbox/done/ once actioned.
 
 ---
 
-## 5. Completion
+## 6. Completion
 
-### 5a. Conditional dependency re-scan
+### 6a. Conditional dependency re-scan
 Only if you added, removed, or changed packages (edited package.json,
 requirements.txt, pyproject.toml, or equivalent), re-run:
 
@@ -147,14 +163,14 @@ requirements.txt, pyproject.toml, or equivalent), re-run:
 
 Skip this step if no dependency files were touched.
 
-### 5b. Write completion report
+### 6b. Write completion report
   1. Read ../schemas/completion.md for the required format
   2. Write the file to ../architect/inbox/
   3. Filename: YYYY-MM-DD_HH-MM_completion_[spec-id].md
 
 ---
 
-## 6. Logs
+## 7. Logs
   1. Read ../schemas/log.md for the required format
   2. Write the file to ../engineer/logs/
   3. Filename: YYYY-MM-DD_HH-MM_log.md
