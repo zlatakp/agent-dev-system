@@ -68,6 +68,8 @@ def load_threads():
         return {}
     with open(THREADS_FILE, 'r', encoding="utf-8") as f:
         return json.load(f)
+def save_threads(threads: dict[str, str]) -> None:
+    THREADS_FILE.write_text(json.dumps(threads, indent=2), encoding="utf-8")
 
 
 def watch():
