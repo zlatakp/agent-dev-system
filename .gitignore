@@ -1,3 +1,4 @@
 log/**
 inbox/**
 outbox/**
+orchestrator/adapters/codex/__pycache__/**
