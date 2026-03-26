@@ -44,10 +44,18 @@ about the broader codebase from what you read.
 If this is a clean slate project, the spec will note it. Skip 1b.
 
 ### 1c. Run baseline diagnostics
-Skip this step if inbox contains a rejected file — run linting
-and type checking only on files listed in "Files to revisit".
+Before running, check ../engineer/logs/last-scan.md
 
-Otherwise run the appropriate suite for the project's language(s):
+If it exists and the current iteration does not affect dependencies,
+skip the full diagnostic and run only:
+
+  ruff check . / npx eslint .
+  pyright . / npx tsc --noEmit
+
+on files listed in "Files in scope" only.
+
+If last-scan.md does not exist, or affects_dependencies is true
+in the spec frontmatter, run the full suite:
 
   Python:
     ruff check .
@@ -63,16 +71,12 @@ Otherwise run the appropriate suite for the project's language(s):
     npm audit
     npm outdated
 
-  Polyglot / duplication check:
+  Polyglot:
     npx jscpd .
 
-Summarise findings before proceeding:
+After a full scan write ../engineer/logs/last-scan.md
+Read ../schemas/last-scan.md for the required format.
 
-  Pre-existing issues:       [list or "none"]
-  Will not fix unless asked: [anything outside spec scope]
-  Blockers for my task:      [anything that prevents implementation]
-
-Do not fix pre-existing issues unless the spec explicitly requires it.
 
 ---
 
