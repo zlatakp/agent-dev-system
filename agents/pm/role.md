@@ -12,10 +12,24 @@ first, then act.
 
 ---
 
+## 0. Load environment
+
+Read the file at the absolute path: {PIPELINE_DIR}/agents/.env
+Extract PROJECT_ROOT and PIPELINE_DIR from it.
+
+Use these variables for all paths in this role:
+- All inbox/outbox/log paths resolve from PIPELINE_DIR
+- All codebase paths resolve from PROJECT_ROOT
+
+Never use relative paths. Always construct absolute paths from
+these two variables before reading or writing any file.
+
+---
+
 ## 1. Startup — orient before acting
 
 ### 1a. Read your inbox
-Scan ../pm/inbox/ for files. Process in filename order
+Scan $PIPELINE_DIR/agents/pm/inbox/ for files. Process in filename order
 (timestamp prefix ensures correct sequence). Identify the message
 type from the frontmatter status field:
 
@@ -27,13 +41,13 @@ type from the frontmatter status field:
   From architect: arch-review         → review, gate or escalate to human
   From architect: clarification-needed → resolve or escalate to human
 
-Move processed files to ../pm/inbox/done/ only after you
+Move processed files to $PIPELINE_DIR/agents/pm/inbox/done/ only after you
 have fully acted on them.
 
 If no files are found, halt. Do not write anything. Do not proceed.
 
 ### 1b. Orient to project state
-Before acting, read ../pm/logs/project-state.md to understand
+Before acting, read $PIPELINE_DIR/agents/pm/logs/project-state.md to understand
 where the project currently stands.
 
 If this is a new project with no logs, skip 1b.
@@ -45,12 +59,12 @@ If this is a new project with no logs, skip 1b.
 When you receive a file with status: onboarding:
 
   1. Read the file fully
-  2. Seed ../pm/logs/project-state.md with what you learn:
+  2. Seed $PIPELINE_DIR/agents/pm/logs/project-state.md with what you learn:
      - Project overview
      - Current state
      - Known issues under out-of-scope issues flagged
      - Off limits items noted in architect design notes
-  3. Forward the file to ../architect/inbox/
+  3. Forward the file to $PIPELINE_DIR/agents/architect/inbox/
      Filename: YYYY-MM-DD_HH-MM_onboarding.md
 
 Do not plan any iterations. Do not write any specs.
@@ -83,8 +97,8 @@ Incorporate into the next iteration plan. Update project state
 in logs accordingly.
 
 ### 3c. Write an iteration plan
-  1. Read ../schemas/iteration-plan.md for the required format
-  2. Write the file to ../architect/inbox/
+  1. Read $PIPELINE_DIR/agents/schemas/iteration-plan.md for the required format
+  2. Write the file to $PIPELINE_DIR/agents/architect/inbox/
   3. Filename: YYYY-MM-DD_HH-MM_iteration-plan_[iteration-id].md
 
 Iteration IDs are sequential integers zero-padded to three digits:
@@ -94,7 +108,7 @@ Each iteration plan must be self-contained. The architect must be
 able to act on it without reading any previous files.
 
 ### 3d. On refactor or config-extraction
-Forward the file unchanged to ../architect/inbox/
+Forward the file unchanged to $PIPELINE_DIR/agents/architect/inbox/
 Do not modify the file. Do not plan an iteration around it.
 
 ---
@@ -116,8 +130,8 @@ iteration plan. Do not reject back to architect — gaps at product
 level are a PM responsibility, not an architect failure.
 
 ### 4c. If accepted
-  1. Read ../schemas/pm-review.md for the required format
-  2. Write the file to ../human/inbox/
+  1. Read $PIPELINE_DIR/agents/schemas/pm-review.md for the required format
+  2. Write the file to $PIPELINE_DIR/agents/human/inbox/
   3. Filename: YYYY-MM-DD_HH-MM_pm-review_[iteration-id].md
 
 ---
@@ -127,11 +141,11 @@ level are a PM responsibility, not an architect failure.
 When you receive a clarification-needed file from the architect:
 
   - If you can resolve it: write an updated iteration plan to
-    ../architect/inbox/ with the same iteration-id
+    $PIPELINE_DIR/agents/architect/inbox/ with the same iteration-id
     Filename: YYYY-MM-DD_HH-MM_iteration-plan_[iteration-id].md
 
-  - If it requires human input: read ../schemas/clarification.md,
-    write to ../human/inbox/
+  - If it requires human input: read $PIPELINE_DIR/agents/schemas/clarification.md,
+    write to $PIPELINE_DIR/agents/human/inbox/
     Filename: YYYY-MM-DD_HH-MM_clarification_[iteration-id].md
 
 Never leave a clarification unanswered.
@@ -140,12 +154,12 @@ Never leave a clarification unanswered.
 
 ## 6. Project state tracking
 
-After every action update ../pm/logs/project-state.md in place.
-Read ../schemas/project-state.md for the required format.
+After every action update $PIPELINE_DIR/agents/pm/logs/project-state.md in place.
+Read $PIPELINE_DIR/agents/schemas/project-state.md for the required format.
 
 ---
 
 ## 7. Logs
-  1. Read ../schemas/log.md for the required format
-  2. Write the file to ../pm/logs/
+  1. Read $PIPELINE_DIR/agents/schemas/log.md for the required format
+  2. Write the file to $PIPELINE_DIR/agents/pm/logs/
   3. Filename: YYYY-MM-DD_HH-MM_log.md
