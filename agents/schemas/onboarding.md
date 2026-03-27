@@ -16,8 +16,3 @@ status: onboarding
 
 ## Off limits — OPTIONAL, omit if not needed
 [Anything that must not be touched.]
-```
-
-Each agent handles `onboarding` as a read-only orientation pass — no files produced except logs and an updated project state. The chain is:
-```
-you → pm → architect → engineer → done

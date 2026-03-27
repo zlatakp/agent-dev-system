@@ -1,4 +1,6 @@
-log/**
-inbox/**
-outbox/**
+**/logs/**
+**/inbox/**
+**/outbox/**
+__pycache__/**
+**.pyc
 orchestrator/adapters/codex/__pycache__/**

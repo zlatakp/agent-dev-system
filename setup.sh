@@ -6,6 +6,7 @@
 set -e
 
 PIPELINE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+echo "PIPELINE_DIR=$PIPELINE_DIR" >> "$PIPELINE_DIR/agents/.env"
 
 echo ""
 echo "agent-pipeline setup"
