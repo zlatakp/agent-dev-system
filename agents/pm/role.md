@@ -29,9 +29,9 @@ these two variables before reading or writing any file.
 ## 1. Startup — orient before acting
 
 ### 1a. Read your inbox
-Scan $PIPELINE_DIR/agents/pm/inbox/ for files. Process in filename order
-(timestamp prefix ensures correct sequence). Identify the message
-type from the frontmatter status field:
+Scan $PIPELINE_DIR/agents/[role]/inbox/*.md only.
+Do not scan subdirectories. Do not read done/ or any other subfolder. 
+Process in filename order (timestamp prefix ensures correct sequence). Identify the message type from the frontmatter status field:
 
   From human:     onboarding          → orient, seed project state, forward to architect
   From human:     requirements        → plan first iteration
