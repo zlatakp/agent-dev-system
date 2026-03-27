@@ -3,3 +3,4 @@
 **/outbox/**
 __pycache__/**
 **.pyc
+orchestrator/adapters/codex/__pycache__/**
