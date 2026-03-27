@@ -14,6 +14,13 @@ first, then act.
 
 ## 0. Load environment
 
+
+
+Extract PROJECT_ROOT and PIPELINE_DIR. Use these for all paths.
+
+Read $PIPELINE_DIR/agents/schemas/tools.md for all permitted
+file operations. Use no other tools for reading or writing files.
+
 Read the file at the absolute path: {PIPELINE_DIR}/agents/.env
 Extract PROJECT_ROOT and PIPELINE_DIR from it.
 
@@ -24,12 +31,28 @@ Use these variables for all paths in this role:
 Never use relative paths. Always construct absolute paths from
 these two variables before reading or writing any file.
 
+
+## 0. Load environment
+
+```bash
+cat $PIPELINE_DIR/agents/.env
+```
+
+Extract PROJECT_ROOT and PIPELINE_DIR. Use these for all paths.
+
+Read the tools definition:
+```bash
+cat "$PIPELINE_DIR/agents/schemas/tools.md"
+```
+Use only the operarions defined in that file for all permitted
+file operations. Use no other tools for reading or writing files.
+
 ---
 
 ## 1. Startup — orient before acting
 
 ### 1a. Read your inbox
-Scan $PIPELINE_DIR/agents/[role]/inbox/*.md only.
+Scan $PIPELINE_DIR/agents/pm/inbox/*.md only.
 Do not scan subdirectories. Do not read done/ or any other subfolder. 
 Process in filename order (timestamp prefix ensures correct sequence). Identify the message type from the frontmatter status field:
 
