@@ -58,12 +58,27 @@ Identify the message type from the frontmatter status field:
 Move processed files to $PIPELINE_DIR/agents/pm/inbox/done/ only
 after you have fully acted on them.
 
-If no files are found, halt. Do not write anything. Do not proceed.
+If no files are found, do not halt immediately.
+Proceed to 1b and 1c before deciding to halt.
 
 ### 1b. Orient to project state
 Before acting, read $PIPELINE_DIR/agents/pm/logs/project-state.md
 
 If this is a new project with no logs, skip 1b.
+
+### 1c. Check for outstanding work
+After reading the inbox, check $PIPELINE_DIR/agents/pm/logs/project-state.md
+
+If inbox is empty but outstanding requirements exist in project state:
+
+  1. Review outstanding requirements
+  2. Plan the next iteration from those requirements
+  3. Write an iteration plan per 2e
+  4. Do not wait for human input — proceed autonomously
+
+If inbox is empty and no outstanding requirements exist:
+  Halt. The project is either complete or waiting for human input.
+  Do not write anything.
 
 ---
 
