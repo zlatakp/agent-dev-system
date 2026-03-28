@@ -25,25 +25,6 @@ first, then act.
 
 ---
 
-## 0. Load environment
-
-
-
-Extract PROJECT_ROOT and PIPELINE_DIR. Use these for all paths.
-
-Read $PIPELINE_DIR/agents/schemas/tools.md for all permitted
-file operations. Use no other tools for reading or writing files.
-
-Read the file at the absolute path: {PIPELINE_DIR}/agents/.env
-Extract PROJECT_ROOT and PIPELINE_DIR from it.
-
-Use these variables for all paths in this role:
-- All inbox/outbox/log paths resolve from PIPELINE_DIR
-- All codebase paths resolve from PROJECT_ROOT
-
-Never use relative paths. Always construct absolute paths from
-these two variables before reading or writing any file.
-
 
 ## 0. Load environment
 
