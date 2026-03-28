@@ -131,10 +131,8 @@ Inboxes and logs are gitignored — never committed.
 
 | File | Written by | Purpose |
 |---|---|---|
-| `requirements.md` | you | Initial project requirements |
-| `feedback.md` | you | Feedback between iterations |
-| `refactor.md` | you | Refactor request |
-| `config-extraction.md` | you | Config extraction request |
+| `human-brief.md` | you | New project, feature, refactor, config, onboarding |
+| `human-feedback.md` | you | Iteration feedback and bug reports |
 | `iteration-plan.md` | pm | Plan sent to architect |
 | `spec.md` | architect | Spec sent to engineer |
 | `clarification.md` | engineer / architect | Blocking questions |
@@ -143,4 +141,5 @@ Inboxes and logs are gitignored — never committed.
 | `arch-review.md` | architect | Accepted, forwarded to PM |
 | `pm-review.md` | pm | Accepted, forwarded to you |
 | `log.md` | all agents | Run log format |
+| `last-scan.md` | engineer | Last diagnostic scan result |
 | `project-state.md` | pm | Rolling project state |

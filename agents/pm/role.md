@@ -48,56 +48,43 @@ Use only the operarions defined in that file for all permitted
 file operations. Use no other tools for reading or writing files.
 
 ---
-
 ## 1. Startup — orient before acting
 
 ### 1a. Read your inbox
 Scan $PIPELINE_DIR/agents/pm/inbox/*.md only.
-Do not scan subdirectories. Do not read done/ or any other subfolder. 
-Process in filename order (timestamp prefix ensures correct sequence). Identify the message type from the frontmatter status field:
+Do not scan subdirectories. Do not read done/ or any other subfolder.
+Process in filename order (timestamp prefix ensures correct sequence).
+Identify the message type from the frontmatter status field:
 
-  From human:     onboarding          → orient, seed project state, forward to architect
-  From human:     requirements        → plan first iteration
-  From human:     feedback            → plan next iteration
-  From human:     refactor            → forward to architect
-  From human:     config-extraction   → forward to architect
-  From architect: arch-review         → review, gate or escalate to human
+  From human:     brief             → read type field, act accordingly
+  From human:     feedback          → plan next iteration
+  From architect: arch-review       → review, gate or escalate to human
   From architect: clarification-needed → resolve or escalate to human
 
-Move processed files to $PIPELINE_DIR/agents/pm/inbox/done/ only after you
-have fully acted on them.
+Move processed files to $PIPELINE_DIR/agents/pm/inbox/done/ only
+after you have fully acted on them.
 
 If no files are found, halt. Do not write anything. Do not proceed.
 
 ### 1b. Orient to project state
-Before acting, read $PIPELINE_DIR/agents/pm/logs/project-state.md to understand
-where the project currently stands.
+Before acting, read $PIPELINE_DIR/agents/pm/logs/project-state.md
 
 If this is a new project with no logs, skip 1b.
 
 ---
 
-## 2. Receiving onboarding
+## 2. Receiving a brief
 
-When you receive a file with status: onboarding:
+Read the type field and act accordingly:
 
-  1. Read the file fully
-  2. Seed $PIPELINE_DIR/agents/pm/logs/project-state.md with what you learn:
-     - Project overview
-     - Current state
-     - Known issues under out-of-scope issues flagged
-     - Off limits items noted in architect design notes
-  3. Forward the file to $PIPELINE_DIR/agents/architect/inbox/
-     Filename: YYYY-MM-DD_HH-MM_onboarding.md
+  type: new-project  → identify core features, plan first iteration
+  type: feature      → plan next iteration adding the feature
+  type: refactor     → forward to architect as refactor task
+  type: config       → forward to architect as config task
+  type: onboarding   → seed project state, forward to architect
 
-Do not plan any iterations. Do not write any specs.
-
----
-
-## 3. Receiving from human — plan an iteration
-
-### 3a. On first requirements
-Read the requirements file and identify:
+### 2a. On new-project
+Read the task file and identify:
 
   - Core features — must exist for the project to be useful
   - Nice to haves — desirable but not blocking
@@ -108,18 +95,31 @@ Do not plan all iterations upfront. Plan only the first iteration
 based on what is most foundational. Nice to haves are never
 included in the first iteration.
 
-### 3b. On feedback
-Read the feedback file and identify:
+### 2b. On feature
+Read the brief file and plan the next iteration around the
+described feature. Update project state accordingly.
 
-  - What to carry forward unchanged
-  - Changes requested for the next iteration
-  - New requirements surfaced
-  - Anything to deprioritise
+### 2c. On refactor or config
+Forward the file unchanged to $PIPELINE_DIR/agents/architect/inbox/
+Do not modify the file. Do not plan an iteration around it.
+Filename: YYYY-MM-DD_HH-MM_[type]_[iteration-id].md
 
-Incorporate into the next iteration plan. Update project state
-in logs accordingly.
+### 2d. On onboarding
+  1. Read the file fully
+  2. Seed $PIPELINE_DIR/agents/pm/logs/project-state.md with:
+     - Project overview
+     - Current state
+     - Known issues under out-of-scope issues flagged
+     - Off limits items noted in architect design notes
+  3. Write a new onboarding file to $PIPELINE_DIR/agents/architect/inbox/
+     updating from: pm and to: architect, keeping body identical
+     Filename: YYYY-MM-DD_HH-MM_onboarding.md
 
-### 3c. Write an iteration plan
+Do not plan any iterations. Do not write any specs.
+
+### 2e. Write an iteration plan
+For new-project and feature types only:
+
   1. Read $PIPELINE_DIR/agents/schemas/iteration-plan.md for the required format
   2. Write the file to $PIPELINE_DIR/agents/architect/inbox/
   3. Filename: YYYY-MM-DD_HH-MM_iteration-plan_[iteration-id].md
@@ -130,9 +130,19 @@ Iteration IDs are sequential integers zero-padded to three digits:
 Each iteration plan must be self-contained. The architect must be
 able to act on it without reading any previous files.
 
-### 3d. On refactor or config-extraction
-Forward the file unchanged to $PIPELINE_DIR/agents/architect/inbox/
-Do not modify the file. Do not plan an iteration around it.
+---
+
+## 3. Receiving feedback
+
+Read the feedback file and identify:
+
+  - Approved items — carry forward unchanged
+  - Issues — treat as bugs, include in next iteration
+  - Adjustments — changes to direction
+  - New requirements — add to outstanding requirements
+
+Incorporate into the next iteration plan. Update project state
+in logs accordingly. Then write an iteration plan per 2e.
 
 ---
 

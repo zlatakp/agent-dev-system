@@ -4,3 +4,14 @@
 __pycache__/**
 **.pyc
 orchestrator/adapters/codex/__pycache__/**
+
+# runtime state — do not commit
+agents/.env
+agents/pm/inbox/
+agents/pm/logs/
+agents/architect/inbox/
+agents/architect/logs/
+agents/engineer/inbox/
+agents/engineer/logs/
+agents/human/inbox/
+agents/human/outbox/
