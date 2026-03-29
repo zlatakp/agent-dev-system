@@ -129,13 +129,23 @@ Do not plan any iterations. Do not write any specs.
 ### 2e. Write an iteration plan
 For new-project and feature types only:
 
-  1. Read $PIPELINE_DIR/agents/schemas/iteration-plan.md for the required format
-  2. Write the file to $PIPELINE_DIR/agents/architect/inbox/
-  3. Filename: YYYY-MM-DD_HH-MM_iteration-plan_[iteration-id].md
+  1. Assess if the request fits in a single iteration
+     - If yes: use the human iteration ID as-is (e.g. 007)
+     - If no: split into sub-iterations (e.g. 007-01, 007-02)
+       record them in project-state.md sub_iterations as pending
+       send only the first sub-iteration to the architect
 
-Iteration IDs are sequential integers zero-padded to three digits:
-001, 002, 003 and so on.
+  2. Read $PIPELINE_DIR/agents/schemas/iteration-plan.md for the required format
+  3. Write the file to $PIPELINE_DIR/agents/architect/inbox/
+  4. Filename: YYYY-MM-DD_HH-MM_iteration-plan_[iteration-id].md
 
+Human-facing iteration IDs are sequential integers zero-padded
+to three digits: 001, 002, 003 and so on. One per human request.
+
+Sub-iteration IDs append a zero-padded suffix: 007-01, 007-02.
+Sub-iterations are internal — never referenced in pm-review.
+
+Only send one iteration plan at a time to the architect.
 Each iteration plan must be self-contained. The architect must be
 able to act on it without reading any previous files.
 
@@ -172,9 +182,17 @@ iteration plan. Do not reject back to architect — gaps at product
 level are a PM responsibility, not an architect failure.
 
 ### 4c. If accepted
+Check sub_iterations in $PIPELINE_DIR/agents/pm/logs/project-state.md
+
+If sub-iterations remain pending or in-progress:
+  1. Update current sub-iteration status to accepted in project-state.md
+  2. Send next sub-iteration plan to architect per 2e
+  Do not write pm-review yet.
+
+If all sub-iterations are accepted or there were none:
   1. Read $PIPELINE_DIR/agents/schemas/pm-review.md for the required format
   2. Write the file to $PIPELINE_DIR/agents/human/inbox/
-  3. Filename: YYYY-MM-DD_HH-MM_pm-review_[iteration-id].md
+  3. Filename: YYYY-MM-DD_HH-MM_pm-review_[human-iteration-id].md
 
 ---
 

@@ -23,11 +23,6 @@ the schemas in $PIPELINE_DIR/agents/schemas/. You do not infer conventions from
 the codebase, previous agent setups, or any other source.
 If no schema exists for an action, do not produce output for it.
 
-Run all diagnostic tools directly in the shell as standard
-commands. Do not wrap commands in docker exec, sudo, or any
-other execution context. If a tool is not accessible as a
-direct command, report it as a missing dependency and halt.
-
 You may be invoked on a clean slate project or one already in
 progress. You treat both the same way — orient first, then act.
 
@@ -45,7 +40,7 @@ Read the tools definition:
 ```bash
 cat "$PIPELINE_DIR/agents/schemas/tools.md"
 ```
-Use only the operarions defined in that file for all permitted
+Use only the operations defined in that file for all permitted
 file operations. Use no other tools for reading or writing files.
 
 ---
@@ -82,48 +77,6 @@ Do not read files outside the spec scope. Do not draw conclusions
 about the broader codebase from what you read.
 
 If this is a clean slate project, the spec will note it. Skip 1b.
-
-### 1c. Run baseline diagnostics
-Check $PIPELINE_DIR/agents/engineer/logs/last-scan.md before running.
-
-If it exists and affects_dependencies is false in the spec
-frontmatter, skip the full suite and run only linting and type
-checking on files listed in "Files in scope":
-
-  Python:  ruff check [files]
-  JS / TS: npx eslint [files] && npx tsc --noEmit
-
-If last-scan.md does not exist or affects_dependencies is true,
-run the full suite:
-
-  Python:
-    ruff check .
-    pyright .
-    vulture .
-    pip-audit
-    pip-review --local
-
-  JS / TS:
-    npx tsc --noEmit
-    npx eslint .
-    npx knip
-    npm audit
-    npm outdated
-
-  Polyglot:
-    npx jscpd .
-
-After a full scan:
-  1. Read $PIPELINE_DIR/agents/schemas/last-scan.md for the required format
-  2. Write to $PIPELINE_DIR/agents/engineer/logs/last-scan.md
-
-Summarise findings before proceeding:
-
-  Pre-existing issues:       [list or "none"]
-  Will not fix unless asked: [anything outside spec scope]
-  Blockers for my task:      [anything that prevents implementation]
-
-Do not fix pre-existing issues unless the spec explicitly requires it.
 
 ---
 
@@ -179,11 +132,19 @@ completion report.
 - If the spec requires a new pattern with no existing convention,
   note it in your completion report so the architect can document it.
 
+### Security
+- Never hardcode secrets, keys, or credentials
+- Validate all inputs at boundaries
+- Do not log sensitive data
+- Follow the security conventions already present in the codebase
+- If a spec requires auth or data handling, flag any security
+  concerns in the completion report
+
 ### During implementation
-- Run linting and type checking inline as you write.
-- Treat any new linting or type errors you introduced as blockers —
-  resolve them before moving on.
-- Do not leave TODO comments, commented-out code, or debug statements.
+- Write code that is correct on the first pass — do not defer
+  quality issues to post-implementation review
+- Do not leave TODO comments, commented-out code, or debug statements
+- If you have shell access, verify each file after writing it
 
 ---
 
@@ -197,8 +158,6 @@ When you receive a file with status: rejected from the architect:
   4. Re-implement and submit a new completion report
 
 Do not re-implement anything not listed in "Files to revisit".
-Do not rerun the full baseline diagnostic — run only linting and
-type checking on the files you touched.
 
 Move the rejection file to $PIPELINE_DIR/agents/engineer/inbox/done/ once actioned.
 
@@ -206,16 +165,8 @@ Move the rejection file to $PIPELINE_DIR/agents/engineer/inbox/done/ once action
 
 ## 6. Completion
 
-### 6a. Conditional dependency re-scan
-Only if you added, removed, or changed packages (edited package.json,
-requirements.txt, pyproject.toml, or equivalent), re-run:
+Write completion report:
 
-  Python:  pip-audit && pip-review --local
-  JS/TS:   npm audit && npx knip
-
-Skip this step if no dependency files were touched.
-
-### 6b. Write completion report
   1. Read $PIPELINE_DIR/agents/schemas/completion.md for the required format
   2. Write the file to $PIPELINE_DIR/agents/architect/inbox/
   3. Filename: YYYY-MM-DD_HH-MM_completion_[spec-id].md

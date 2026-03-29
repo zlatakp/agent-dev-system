@@ -26,6 +26,9 @@ only one reasonable way to implement it. No ambiguity.]
 [Specific patterns, conventions, or separation of concerns rules
 the engineer must respect for this iteration.]
 
+## Security considerations — OPTIONAL, omit if not needed
+[Specific security requirements for this iteration.]
+
 ## Out of scope
 [Explicit list of things the engineer must not do, even if they
 seem related.]

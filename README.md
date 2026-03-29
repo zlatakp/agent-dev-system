@@ -141,5 +141,4 @@ Inboxes and logs are gitignored — never committed.
 | `arch-review.md` | architect | Accepted, forwarded to PM |
 | `pm-review.md` | pm | Accepted, forwarded to you |
 | `log.md` | all agents | Run log format |
-| `last-scan.md` | engineer | Last diagnostic scan result |
 | `project-state.md` | pm | Rolling project state |

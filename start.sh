@@ -16,8 +16,6 @@ echo ""
 
 # ── Pick message type ─────────────────────────────────────────
 
-
-
 echo "Message type:"
 echo ""
 
@@ -31,6 +29,7 @@ select STATUS in brief feedback; do
 done
 
 TASK_TYPE=""
+ITERATION_ID=""
 
 if [ "$STATUS" = "brief" ]; then
   echo ""
@@ -47,24 +46,35 @@ if [ "$STATUS" = "brief" ]; then
   done
 fi
 
+if [ "$STATUS" = "feedback" ]; then
+  LATEST_REVIEW=$(ls -t "$PIPELINE_DIR/agents/human/inbox/"*pm-review*.md 2>/dev/null | head -1)
+
+  if [ -n "$LATEST_REVIEW" ]; then
+    ITERATION_ID=$(grep "^iteration_id:" "$LATEST_REVIEW" | sed 's/iteration_id: //' | tr -d '[:space:]')
+    echo ""
+    echo "  Detected iteration: $ITERATION_ID"
+  else
+    read -p "  Iteration ID (e.g. 001): " ITERATION_ID < /dev/tty
+  fi
+fi
+
 echo ""
 echo "Selected: $STATUS${TASK_TYPE:+ / $TASK_TYPE}"
 echo ""
 
-
-# ── Pick message type ─────────────────────────────────────────
+# ── Load schema ───────────────────────────────────────────────
 
 SCHEMAS_DIR="$PIPELINE_DIR/agents/schemas"
-
-SCHEMA_FILE="$SCHEMAS_DIR/human-$STATUS.md"
+SCHEMA_FILE="$SCHEMAS_DIR/human-${STATUS}.md"
 
 if [ ! -f "$SCHEMA_FILE" ]; then
   echo "Error: schema not found: $SCHEMA_FILE"
   exit 1
 fi
 
+# ── Extract body fields only (skip frontmatter) ───────────────
 
-mapfile -t FIELDS < <(grep "^## " "$SCHEMA_FILE" | sed 's/## //' | sed 's/\r//' | sed 's/ — OPTIONAL.*//')
+mapfile -t FIELDS < <(awk '/^---/{found++; next} found>=2 && /^## /{print}' "$SCHEMA_FILE" | sed 's/## //' | sed 's/\r//' | sed 's/ — OPTIONAL.*//')
 
 declare -A FIELD_VALUES
 declare -A FIELD_OPTIONAL
@@ -84,27 +94,28 @@ for field in "${FIELDS[@]}"; do
   FIELD_VALUES[$field]="$VALUE"
 done
 
+
+
 # ── Compose file ──────────────────────────────────────────────
 
 TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
 FILENAME="${TIMESTAMP}_${STATUS}.md"
 FILEPATH="$PIPELINE_DIR/agents/pm/inbox/$FILENAME"
 
-cat > "$FILEPATH" << EOF
----
-date: $(date +%Y-%m-%d)
-from: human
-to: pm
-status: $STATUS
-$([ -n "$TASK_TYPE" ] && echo "type: $TASK_TYPE")
----
+{
+  echo "---"
+  [ -n "$ITERATION_ID" ] && echo "iteration_id: $ITERATION_ID"
+  echo "date: $(date +%Y-%m-%d)"
+  echo "from: human"
+  echo "to: pm"
+  echo "status: $STATUS"
+  [ -n "$TASK_TYPE" ] && echo "type: $TASK_TYPE"
+  echo "---"
+} > "$FILEPATH"
 
-EOF
-TIMESTAMP=$(date +%Y-%m-%d_%H-%M)
+# ── Write body fields ─────────────────────────────────────────
 
-
-# write fields
-for field in "${!FIELD_VALUES[@]}"; do
+for field in "${FIELDS[@]}"; do
   VALUE="${FIELD_VALUES[$field]}"
   if [ -n "$VALUE" ] || [ -z "${FIELD_OPTIONAL[$field]}" ]; then
     cat >> "$FILEPATH" << EOF
@@ -114,6 +125,8 @@ $VALUE
 EOF
   fi
 done
+
+# ── Done ──────────────────────────────────────────────────────
 
 echo ""
 echo "✓ Message written: $FILENAME"
