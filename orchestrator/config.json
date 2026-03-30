@@ -1,0 +1,12 @@
+{
+  "adapter": "codex",
+  "projectRoot": "/Users/zlataplotnikova/Desktop/Repos/webapp",
+  "watchInterval": 5,
+  "agents": [
+    "pm",
+    "architect",
+    "engineer"
+  ],
+  "stateFile": "orchestrator/agent_threads.json",
+  "codexBinary": "/Applications/Codex.app/Contents/Resources/codex"
+}

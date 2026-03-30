@@ -4,6 +4,8 @@
 __pycache__/**
 **.pyc
 orchestrator/adapters/codex/__pycache__/**
+dist/
+node_modules/
 
 # runtime state — do not commit
 agents/.env

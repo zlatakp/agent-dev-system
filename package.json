@@ -1,0 +1,17 @@
+{
+    "name": "agent-orchestrator",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "watch": "tsx orchestrator/run.ts"
+    },
+    "dependencies": {
+        "@openai/codex-sdk": "0.117.0",
+        "chokidar": "^5.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^24.5.2",
+        "tsx": "^4.20.5",
+        "typescript": "^5.9.2"
+    }
+}

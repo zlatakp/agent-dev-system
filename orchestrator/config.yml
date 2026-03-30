@@ -1,4 +1,0 @@
-adapter: codex        # claude | codex | ollama | cursor
-#model: claude-sonnet-4-20250514
-project_root: /Users/zlataplotnikova/Desktop/Repos/webapp
-watch_interval: 5      # seconds between inbox checks
