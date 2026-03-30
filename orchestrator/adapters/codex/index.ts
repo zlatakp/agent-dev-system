@@ -4,6 +4,7 @@ const codex = new Codex();
 import type {
   RunStreamedResult,
   ThreadItem,
+  ThreadOptions,
   Usage,
 } from "@openai/codex-sdk";
 
@@ -89,7 +90,7 @@ export async function collectStreamInfo(
 }
 
 
-export async function run(_role: string, threadId: string | null) { //_message: string,
+export async function run(_role: string, threadId: string | null, projectRoot: string) { //_message: string,
   let thread: Thread;
 
   if (threadId == null) {
@@ -97,11 +98,11 @@ export async function run(_role: string, threadId: string | null) { //_message: 
   } else {
     thread = codex.resumeThread(threadId)
   }
-
+  const options: ThreadOptions = { workingDirectory: projectRoot, model: "gpt5.4", modelReasoningEffort: "high" }
   const role = _role;
   const message = "Check your inbox and proceed."
   const stream = await thread.runStreamed(
-    `${role}\n${message}`
+    `${role}\n${message}`,
   );
 
   const { result, items, usage } = await collectStreamInfo(stream);

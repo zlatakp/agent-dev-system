@@ -9,6 +9,7 @@ type RunAdapter = (
     role: string,
     //message: string,
     threadId: string | null,
+    projectRoot: string
 ) => Promise<AdapterResult>;
 
 type OrchestratorConfig = {
@@ -25,12 +26,13 @@ type AdapterResult = {
 };
 
 const REPO_ROOT = process.cwd();
-const CONFIG_PATH = path.resolve(REPO_ROOT, "orchestrator", "config.json");
+//const CONFIG_PATH = path.resolve(REPO_ROOT, "orchestrator", "config.json");
+const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
 
-function loadConfig(): OrchestratorConfig {
-    const raw = fs.readFileSync(CONFIG_PATH, "utf8");
-    return JSON.parse(raw) as OrchestratorConfig;
-}
+// function loadConfig(): OrchestratorConfig {
+//     const raw = fs.readFileSync(CONFIG_PATH, "utf8");
+//     return JSON.parse(raw) as OrchestratorConfig;
+// }
 
 function resolveRepoPath(value: string): string {
     return path.isAbsolute(value) ? value : path.resolve(REPO_ROOT, value);
@@ -85,7 +87,7 @@ function runAgent(
     );
     const threadId = threads[agent] ?? null;
 
-    return adapter_model(role, threadId);
+    return adapter_model(role, threadId, config.projectRoot);
 }
 
 
@@ -163,7 +165,6 @@ function saveThreads(stateFile: string, threads: Record<string, string>): void {
 async function watch() {
     console.log('start')
     try {
-        const config = loadConfig();
         console.log(config)
         const adapter = getAdapter(config);
         const stateFile = resolveRepoPath(config.stateFile);

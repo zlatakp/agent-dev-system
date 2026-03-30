@@ -1,7 +1,6 @@
 {
   "adapter": "codex",
   "projectRoot": "/Users/zlataplotnikova/Desktop/Repos/webapp",
-  "watchInterval": 5,
   "agents": [
     "pm",
     "architect",
