@@ -17,3 +17,7 @@ agents/engineer/inbox/
 agents/engineer/logs/
 agents/human/inbox/
 agents/human/outbox/
+
+
+**/agent_threads.json
+**/config.json

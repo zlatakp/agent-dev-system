@@ -89,7 +89,7 @@ export async function collectStreamInfo(
 }
 
 
-export async function run(_role: string, _message: string, threadId: string | null) {
+export async function run(_role: string, threadId: string | null) { //_message: string,
   let thread: Thread;
 
   if (threadId == null) {
@@ -99,7 +99,7 @@ export async function run(_role: string, _message: string, threadId: string | nu
   }
 
   const role = _role;
-  const message = _message;
+  const message = "Check your inbox and proceed."
   const stream = await thread.runStreamed(
     `${role}\n${message}`
   );
