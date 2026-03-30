@@ -7,5 +7,7 @@
     "engineer"
   ],
   "stateFile": "orchestrator/agent_threads.json",
-  "codexBinary": "/Applications/Codex.app/Contents/Resources/codex"
+  "codexBinary": "/Applications/Codex.app/Contents/Resources/codex",
+  "model": "gpt-5.4",
+  "modelReasoningEffort": "high"
 }

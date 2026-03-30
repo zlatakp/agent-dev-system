@@ -90,7 +90,7 @@ export async function collectStreamInfo(
 }
 
 
-export async function run(_role: string, threadId: string | null, projectRoot: string) { //_message: string,
+export async function run(_role: string, threadId: string | null, config: { projectRoot: any; model: any; modelReasoningEffort: any; }) { //_message: string,
   let thread: Thread;
 
   if (threadId == null) {
@@ -98,7 +98,7 @@ export async function run(_role: string, threadId: string | null, projectRoot: s
   } else {
     thread = codex.resumeThread(threadId)
   }
-  const options: ThreadOptions = { workingDirectory: projectRoot, model: "gpt5.4", modelReasoningEffort: "high" }
+  const options: ThreadOptions = { workingDirectory: config.projectRoot, model: config.model, modelReasoningEffort: config.modelReasoningEffort }
   const role = _role;
   const message = "Check your inbox and proceed."
   const stream = await thread.runStreamed(

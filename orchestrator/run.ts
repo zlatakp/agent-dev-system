@@ -87,7 +87,7 @@ function runAgent(
     );
     const threadId = threads[agent] ?? null;
 
-    return adapter_model(role, threadId, config.projectRoot);
+    return adapter_model(role, threadId, config);
 }
 
 
