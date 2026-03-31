@@ -9,11 +9,15 @@ import type {
   Usage,
 } from "@openai/codex-sdk";
 
+import { createCodexLogger } from "./logger.js";
+
 type CollectStreamInfoResult = {
   result: string;
   items: ThreadItem[];
   usage: Usage | null;
 };
+
+const logRun = createCodexLogger();
 
 export async function collectStreamInfo(
   stream: RunStreamedResult,
@@ -102,13 +106,23 @@ export async function run(_role: string, threadId: string | null, config: Record
   }
   const role = _role;
   const message = "Check your inbox and proceed."
-  const stream = await thread.runStreamed(
-    `${role}\n${message}`,
-  );
+  const input = `${role}\n${message}`;
+  const logger = logRun({
+    thread_id: threadId,
+    model: config.model,
+    model_reasoning_effort: config.modelReasoningEffort,
+  });
 
-  const { result, items, usage } = await collectStreamInfo(stream);
+  try {
+    const stream = await thread.runStreamed(input);
+    const { result, items, usage } = await collectStreamInfo(stream);
 
+    logger.success(usage, thread.id ?? threadId);
 
-  return { result, thread }
+    return { result, thread }
+  } catch (error) {
+    logger.error(error, thread.id ?? threadId);
+    throw error;
+  }
 
 }
