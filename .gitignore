@@ -22,4 +22,4 @@ agents/human/outbox/
 **/agent_threads.json
 **/config.json
 
-static/**
+**/static/**

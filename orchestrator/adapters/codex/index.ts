@@ -2,6 +2,7 @@ import { Codex, Thread } from "@openai/codex-sdk";
 
 const codex = new Codex();
 import type {
+  ModelReasoningEffort,
   RunStreamedResult,
   ThreadItem,
   ThreadOptions,
@@ -90,7 +91,7 @@ export async function collectStreamInfo(
 }
 
 
-export async function run(_role: string, threadId: string | null, config: { projectRoot: any; model: any; modelReasoningEffort: any; }) { //_message: string,
+export async function run(_role: string, threadId: string | null, config: Record<string, any>) { //_message: string,
   let thread: Thread;
 
   if (threadId == null) {
