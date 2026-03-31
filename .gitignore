@@ -21,6 +21,7 @@ agents/human/outbox/
 
 **/agent_threads.json
 orchestrator/agent_threads.json
+orchestrator/config.json
 **/config.json
 
 **/static/**
