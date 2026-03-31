@@ -19,6 +19,16 @@ type CollectStreamInfoResult = {
 
 const logRun = createCodexLogger();
 
+const schema = {
+  type: "object",
+  properties: {
+    summary: { type: "string" },
+    status: { type: "string", enum: ["ok", "action_required"] },
+  },
+  required: ["summary", "status"],
+  additionalProperties: false,
+} as const;
+
 export async function collectStreamInfo(
   stream: RunStreamedResult,
 ): Promise<CollectStreamInfoResult> {
@@ -113,8 +123,9 @@ export async function run(_role: string, threadId: string | null, config: Record
     model_reasoning_effort: config.modelReasoningEffort,
   });
 
+
   try {
-    const stream = await thread.runStreamed(input);
+    const stream = await thread.runStreamed(input, { outputSchema: schema });
     const { result, items, usage } = await collectStreamInfo(stream);
 
     logger.success(usage, thread.id ?? threadId);
