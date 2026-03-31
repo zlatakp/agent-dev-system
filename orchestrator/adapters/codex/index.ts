@@ -107,7 +107,7 @@ export async function collectStreamInfo(
 
 export async function run(_role: string, threadId: string | null, config: Record<string, any>) { //_message: string,
   let thread: Thread;
-  const options: ThreadOptions = { workingDirectory: config.projectRoot, model: config.model, modelReasoningEffort: config.modelReasoningEffort, additionalDirectories: [config.pipelineRoot] }
+  const options: ThreadOptions = { sandboxMode: "workspace-write", workingDirectory: config.projectRoot, model: config.model, modelReasoningEffort: config.modelReasoningEffort, additionalDirectories: [config.pipelineRoot] }
 
   if (threadId == null) {
     thread = codex.startThread(options)
