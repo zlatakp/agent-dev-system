@@ -93,13 +93,13 @@ export async function collectStreamInfo(
 
 export async function run(_role: string, threadId: string | null, config: Record<string, any>) { //_message: string,
   let thread: Thread;
+  const options: ThreadOptions = { workingDirectory: config.projectRoot, model: config.model, modelReasoningEffort: config.modelReasoningEffort }
 
   if (threadId == null) {
-    thread = codex.startThread()
+    thread = codex.startThread(options)
   } else {
-    thread = codex.resumeThread(threadId)
+    thread = codex.resumeThread(threadId, options)
   }
-  const options: ThreadOptions = { workingDirectory: config.projectRoot, model: config.model, modelReasoningEffort: config.modelReasoningEffort }
   const role = _role;
   const message = "Check your inbox and proceed."
   const stream = await thread.runStreamed(
