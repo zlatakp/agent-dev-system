@@ -1,6 +1,7 @@
 {
   "adapter": "codex",
   "projectRoot": "/Users/zlataplotnikova/Desktop/Repos/webapp",
+  "pipelineRoot": "/Users/zlataplotnikova/Desktop/Repos/agent-dev-system",
   "agents": [
     "pm",
     "architect",
