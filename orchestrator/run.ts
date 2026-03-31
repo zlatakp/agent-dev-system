@@ -27,7 +27,7 @@ type AdapterResult = {
 
 const REPO_ROOT = process.cwd();
 //const CONFIG_PATH = path.resolve(REPO_ROOT, "orchestrator", "config.json");
-const config = JSON.parse(fs.readFileSync("config.json", "utf8"));
+const config = JSON.parse(fs.readFileSync("orchestrator/config.json", "utf8"));
 
 // function loadConfig(): OrchestratorConfig {
 //     const raw = fs.readFileSync(CONFIG_PATH, "utf8");
